@@ -21,7 +21,7 @@ conda activate youtube-transcription
 ```
 
 # Run the Code
-Before running the flow ensure you have the necessary AWS infrastructure setup for Metaflow. These flows require S3 and GPU/s.
+Before running the flow ensure you have the necessary AWS infrastructure setup for Metaflow. If you wany to run steps remotely you need to configure Metaflow storage in S3. 
 
 ## Accessing Remote Compute
 
