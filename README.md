@@ -53,11 +53,11 @@ IS_REMOTE=1 IS_GPU=1 python youtube_video_transcriber.py run --model large
 
 ## Transcribe one Video
 ```sh
-IS_REMOTE=0 python youtube_video_transcriber.py run --model tiny
+python youtube_video_transcriber.py run
 ```
 
 ```sh
-IS_REMOTE=0 python youtube_video_transcriber.py run --model tiny --url
+python youtube_video_transcriber.py run --url 'https://www.youtube.com/watch?v=OH0Y_DUZu4Y'
 ```
 
 ## Transcribe each Video in a Playlist
@@ -65,7 +65,7 @@ IS_REMOTE=0 python youtube_video_transcriber.py run --model tiny --url
 python youtube_video_transcriber.py run --url 'https://www.youtube.com/playlist?list=PLUsOvkBBnJBc1fcDQEOPJ77pMcE4CnNxc'
 ```
 
-## Transcribe a List of Video's
+## Transcribe a List of Videos
 ```sh
 python youtube_video_transcriber.py run --urls 'science_video_urls.txt'
 ```
