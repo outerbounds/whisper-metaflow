@@ -23,17 +23,18 @@ conda activate youtube-transcription
 # Run the Code
 Before running the flow ensure you have the necessary AWS infrastructure setup for Metaflow. These flows require S3 and GPU/s.
 
-## Accessing Compute
+## Accessing Remote Compute
 
-To run this code remotetly you will need access to a [Metaflow deployment](#operate-metaflow-on-aws-infrastructure). Inside your environment configuration `.env` file:
+To run this code remotetly you will need access to a [Metaflow deployment](#operate-metaflow-on-aws-infrastructure). Inside of a `.env` file place:
 
 ```.env
 IS_REMOTE="1"
 DEFAULT_MODEL_TYPE="small"
-BATCH_QUEUE_CPU="oleg2-mztdpcvj"
+BATCH_QUEUE_CPU="<>"
 CPU_IMAGE="eddieob/whisper:latest"
-BATCH_QUEUE_GPU="oleg2-mztdpcvj-gpu"
+BATCH_QUEUE_GPU="<>"
 GPU_IMAGE="eddieob/whisper-gpu:latest"
+REMOTE_BACKEND="kubernetes"
 ```
 
 ### Local

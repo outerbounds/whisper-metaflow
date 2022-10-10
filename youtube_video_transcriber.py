@@ -1,4 +1,4 @@
-from metaflow import FlowSpec, step, Parameter, batch, retry
+from metaflow import FlowSpec, step, Parameter, batch, kubernetes, retry
 from flow_utils import remote_compute_config
 import os
 from dotenv import load_dotenv
@@ -58,7 +58,7 @@ class YouTubeVideoTranscription(FlowSpec):
         self.next(self.transcribe, foreach='pending_transcription_task')
 
     @remote_compute_config(
-        batch, # swappable with Metaflow's `kubernetes` decorator
+        kubernetes if os.getenv('REMOTE_BACKEND', 'batch') == 'kubernetes' else batch, 
         flag = (os.getenv('IS_REMOTE', '0') == '1') or (os.getenv('IS_GPU', '0') == '1')
     )
     @step
