@@ -35,7 +35,6 @@ class YouTubeVideoTranscription(FlowSpec):
             # single video watch urls look like:
             # 'https://www.youtube.com/watch?v=<VIDEO ID>'
             if self.url.startswith('https://www.youtube.com/watch'):
-                video = YouTube(self.url)
                 self.pending_transcription_task = [
                     make_task(self.url, self.model_type)
                 ]
