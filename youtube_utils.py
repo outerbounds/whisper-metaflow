@@ -49,7 +49,7 @@ def make_task(video_url, model_type):
         'publish_date': video.publish_date
     })
 
-def transcribe_video(transcription_task, output_path = './youtube-flow-audio-files/'):
+def transcribe_video(transcription_task, output_path = './youtube-audio-files/'):
     """
     Extract the audio from the YouTube watch `url` in the `transcription_task`. 
     The audio will be saved locally to `output_path/transcription_task.filename`. 

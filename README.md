@@ -30,11 +30,11 @@ To run this code remotetly you will need access to a [Metaflow deployment](#oper
 ```.env
 IS_REMOTE="1"
 DEFAULT_MODEL_TYPE="small"
-BATCH_QUEUE_CPU="<>"
+BATCH_QUEUE_CPU="<YOUR AWS BATCH QUEUE>"
 CPU_IMAGE="eddieob/whisper:latest"
-BATCH_QUEUE_GPU="<>"
+BATCH_QUEUE_GPU="<YOUR GPU-ENABLED AWS BATCH QUEUE>"
 GPU_IMAGE="eddieob/whisper-gpu:latest"
-REMOTE_BACKEND="kubernetes"
+REMOTE_INFRA="kubernetes"
 ```
 
 ### Local
@@ -44,12 +44,12 @@ IS_REMOTE=0 python youtube_video_transcriber.py run --model tiny
 
 ### Remote
 ```sh
-IS_REMOTE=1 python youtube_video_transcriber.py run --model large
+IS_REMOTE=1 python youtube_video_transcriber.py run --model tiny
 ```
 
 ### Accessing GPUs
 ```sh
-IS_REMOTE=1 IS_GPU=1 python youtube_video_transcriber.py run --model large
+IS_GPU=1 python youtube_video_transcriber.py run --model large
 ```
 
 ## Transcribe one Video

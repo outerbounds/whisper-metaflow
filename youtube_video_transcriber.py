@@ -63,7 +63,6 @@ class YouTubeVideoTranscription(FlowSpec):
     )
     @step
     def transcribe(self):
-        import whisper
         from youtube_utils import transcribe_video
         self.transcription = self.input
         print("Transcribing video at {}...".format(self.transcription.url))
