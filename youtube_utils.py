@@ -57,12 +57,13 @@ def transcribe_video(transcription_task, output_path = './youtube-audio-files/')
         Note: there are `result` we are not returning that could be added to the flow versioning.
     """
     import whisper
+    print("Extracting audio from video at {}...".format(transcription_task.url))
     audio = YouTube(transcription_task.url).streams.get_audio_only()
     audio.download(output_path = output_path, filename = transcription_task.filename)
     audio_filename = output_path + transcription_task.filename
     print("Loading {} model...".format(transcription_task.model_type))
     model = whisper.load_model(transcription_task.model_type)
-    print("Model loaded succssfully...")
+    print("Model loaded successfully...")
     print("Transcribing {}...".format(audio_filename))
     result = model.transcribe(audio_filename)
     return result['text']

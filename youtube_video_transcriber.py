@@ -65,7 +65,6 @@ class YouTubeVideoTranscription(FlowSpec):
     def transcribe(self):
         from youtube_utils import transcribe_video
         self.transcription = self.input
-        print("Transcribing video at {}...".format(self.transcription.url))
         self.transcription.transcription_text = transcribe_video(self.transcription)
         self.next(self.postprocess_transcription)
 
