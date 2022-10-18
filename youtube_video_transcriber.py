@@ -1,5 +1,4 @@
 from metaflow import FlowSpec, step, Parameter, batch, kubernetes, retry
-from flow_utils import remote_compute_config
 import os
 from dotenv import load_dotenv
 load_dotenv('.env')
@@ -50,26 +49,34 @@ class YouTubeVideoTranscription(FlowSpec):
         else: # user passed a list of urls
             self.pending_transcription_task = []
             with open(self.url_filename, 'r') as file:
-                self.pending_transcription_task = [
-                    make_task(url_line.strip(), self.model_type)
-                    for url_line in file
-                ]
+                for url_line in file:
+                    if url_line.strip().startswith('https://www.youtube.com/playlist'):
+                        self.pending_transcription_task.extend([
+                            make_task(video_url, self.model_type)
+                            for video_url in Playlist(url_line.strip())
+                        ])
+                    else:
+                        self.pending_transcription_task.append(
+                            make_task(url_line.strip(), self.model_type)
+                        )
 
         self.next(self.transcribe, foreach='pending_transcription_task')
 
-    @remote_compute_config(
-        kubernetes if os.getenv('REMOTE_BACKEND', 'batch') == 'kubernetes' else batch, 
-        flag = (os.getenv('IS_REMOTE', '0') == '1') or (os.getenv('IS_GPU', '0') == '1')
+    @batch(
+        cpu = 8, # gpu = 1, 
+        memory = int(os.getenv('MEMORY_REQUIRED', '10000')),
+        image = os.getenv('CPU_IMAGE', 'eddieob/whisper-cpu:latest'),
+        queue = os.getenv('BATCH_QUEUE_CPU')
     )
     @step
     def transcribe(self):
         from youtube_utils import transcribe_video
         self.transcription = self.input
         self.transcription.transcription_text = transcribe_video(self.transcription)
-        self.next(self.postprocess_transcription)
+        self.next(self.postprocess)
 
     @step
-    def postprocess_transcription(self, parent_steps):
+    def postprocess(self, parent_steps):
         import pandas as pd
         self.results = pd.DataFrame([_step.transcription.dict() for _step in parent_steps])
         self.next(self.end)
