@@ -65,7 +65,7 @@ def make_task(video_url, model_type):
         'publish_date': video.publish_date
     })
 
-def transcribe_video(transcription_task, output_path = './youtube-audio-files/', quiet=False, device = torch.device('cpu')):
+def transcribe_video(transcription_task, output_path = './youtube-audio-files/', quiet=False):
     """
     Extract the audio from the YouTube watch `url` in the `transcription_task`. 
     The audio will be saved locally to `output_path/transcription_task.filename`. 
@@ -78,8 +78,9 @@ def transcribe_video(transcription_task, output_path = './youtube-audio-files/',
     audio = YouTube(transcription_task.url).streams.get_audio_only()
     audio.download(output_path = output_path, filename = transcription_task.filename)
     audio_filename = output_path + transcription_task.filename
+    device = torch.device('cpu')
     if not quiet:
-        print("Loading {} model...".format(transcription_task.model_type))
+        print("Loading {} model on {}...".format(transcription_task.model_type, device))
     model = whisper.load_model(transcription_task.model_type, device = device)
     if not quiet:
         print("Model loaded successfully...")

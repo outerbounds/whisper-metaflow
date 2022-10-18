@@ -1,4 +1,4 @@
-from metaflow import FlowSpec, step, Parameter, batch, kubernetes, retry
+from metaflow import FlowSpec, step, Parameter, batch, card, current
 import os
 from dotenv import load_dotenv
 load_dotenv('.env')
@@ -22,6 +22,8 @@ class YouTubeVideoTranscription(FlowSpec):
         help = """The size of the Whisper variant. 
                   See the current options at https://github.com/openai/whisper/blob/main/whisper/__init__.py#L17-L27"""
     )
+    
+    make_wordcloud = Parameter('wc', type = bool, default = True)
  
     @step
     def start(self):
@@ -62,12 +64,12 @@ class YouTubeVideoTranscription(FlowSpec):
 
         self.next(self.transcribe, foreach='pending_transcription_task')
 
-    @batch(
-        cpu = 8, # gpu = 1, 
-        memory = int(os.getenv('MEMORY_REQUIRED', '10000')),
-        image = os.getenv('CPU_IMAGE', 'eddieob/whisper-cpu:latest'),
-        queue = os.getenv('BATCH_QUEUE_CPU')
-    )
+    # @batch(
+    #     cpu = 8, # gpu = 1, 
+    #     memory = int(os.getenv('MEMORY_REQUIRED', '10000')),
+    #     image = os.getenv('CPU_IMAGE', 'eddieob/whisper-cpu:latest'),
+    #     queue = os.getenv('BATCH_QUEUE_CPU')
+    # )
     @step
     def transcribe(self):
         from youtube_utils import transcribe_video
@@ -75,10 +77,35 @@ class YouTubeVideoTranscription(FlowSpec):
         self.transcription.transcription_text = transcribe_video(self.transcription)
         self.next(self.postprocess)
 
+    @card
     @step
     def postprocess(self, parent_steps):
         import pandas as pd
         self.results = pd.DataFrame([_step.transcription.dict() for _step in parent_steps])
+        
+        if self.make_wordcloud:
+            from nlp_utils import aggregate_stopwords
+            from metaflow.cards import Image
+            import matplotlib.pyplot as plt
+            from scipy.ndimage import gaussian_gradient_magnitude
+            from wordcloud import WordCloud, ImageColorGenerator
+            all_text = " ".join(
+                v.strip() 
+                for v in self.results.transcription_text.values
+            )
+            wordcloud = WordCloud(
+                max_words = 100, 
+                max_font_size=40, 
+                background_color='white',
+                stopwords = aggregate_stopwords()
+            ).generate(all_text)
+
+            fig, ax = plt.subplots(1,1)
+            plt.axis("off")
+            ax.imshow(wordcloud, interpolation="bilinear")
+            current.card.append(Image.from_matplotlib(fig))
+            
+        
         self.next(self.end)
 
     @step
