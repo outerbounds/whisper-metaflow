@@ -36,8 +36,6 @@ class YouTubeVideoTranscription(FlowSpec, Mixin):
         'min-ct', type = int, default = 5,
         help = "The title to be displayed at the top the post processing step's card."
     )
-    
-    AUDIO_OUTPUT = Parameter('audio-dst', type = str, default = './youtube-audio-files/')
 
     @step
     def start(self):
