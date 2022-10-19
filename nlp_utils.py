@@ -20,13 +20,17 @@ EXTRA_STOPWORDS = [
 class Mixin:
     
     SEED = 33
-    PCA_COMPONENTS = 2 # plotting for > 2 dim changes isn't implemented in make_w2v.
+    PCA_COMPONENTS = 2 # plotting for > 2 dim isn't implemented in make_w2v.
     W2V_FIG_FILENAME = './w2v.png'
     AUDIO_OUTPUT = './youtube-audio-files/'
-    YELLOW_PURPLE_RECOLOR = True
+    YELLOW_PURPLE_RECOLOR = False
     WORDCLOUD_FIG_FILENAME = './wordcloud.png'
 
     def aggregate_stopwords(self, words = EXTRA_STOPWORDS):
+        """
+        Return a list of stop words. Aggregate across packages
+            that are currently installed, text_files, and EXTRA_STOPWORDS. 
+        """
         try:
             with open('stop_words_english.txt') as f:
                 words += [s.split('\n')[0] for s in f.readlines()]
@@ -53,6 +57,10 @@ class Mixin:
         return list(set(map(lambda w: w.strip().lower(), words)))
 
     def get_wordcloud_figure(self, document, fig = None, ax = None, title = ''):
+        """
+        Make a wordcloud from a document represented as one string.
+        Return it as a matplotlib figure.
+        """
         import matplotlib.pyplot as plt
         from scipy.ndimage import gaussian_gradient_magnitude
         from wordcloud import WordCloud, ImageColorGenerator
@@ -73,7 +81,7 @@ class Mixin:
                             'reliability', 'responsiblity', 'building', 'product', 'tool', 'stack',
                             'systems', 'system', 'build', 'built'],
                 '#8e2f73': ['data scientist', 'machine learning', 'data science', 'data',
-                        'idea', 'model', 'errors', 'learn', 'ambiguity', 'guess', 'machine learning']
+                            'idea', 'model', 'errors', 'learn', 'ambiguity', 'guess', 'machine learning']
             }
             default_color = '#333333'
             grouped_color_func = GroupedColorFunc(color_to_words, default_color)
@@ -102,7 +110,10 @@ class Mixin:
         ]
 
     def get_w2v_figure(self, document, fig = None, ax = None, title = ''):
-
+        """
+        Make a word2vec embedding and PCA visualization from a document represented as one string.
+        Return the visualization as a matplotlib figure if the PCA dimensions = 2.
+        """
         from gensim.models import Word2Vec
         from sklearn.decomposition import PCA
 
