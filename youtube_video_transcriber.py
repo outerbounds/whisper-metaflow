@@ -134,7 +134,6 @@ class YouTubeVideoTranscription(FlowSpec, Mixin):
         for i, document in enumerate(self.documents):
             md.extend([
                 Markdown("## *Video Name:* {}".format(task_data[i]['title'])),
-                Markdown("![]({})".format(self.AUDIO_OUTPUT + task_data[i]['filename'])),
                 Markdown(document)
             ])
         current.card.extend(md)
