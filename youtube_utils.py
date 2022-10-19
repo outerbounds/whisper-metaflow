@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from platform import platform
 import torch
 import datetime as dt
+from metaflow.cards import MetaflowCard
 
 def filenameify(value, allow_unicode=False):
     """

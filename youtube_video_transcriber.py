@@ -83,7 +83,8 @@ class YouTubeVideoTranscription(FlowSpec, Mixin):
                 audio.download(output_path = self.AUDIO_OUTPUT, filename = _transcription_task.filename)
                 audio_filename = self.AUDIO_OUTPUT + _transcription_task.filename
             except LiveStreamError:
-                print("{} is a coming live stream, removing it from the pending transcription list.".format(_transcription_task.url))
+                msg = "{} is a coming live stream, removing it from the pending transcription list."
+                print(msg.format(_transcription_task.url))
                 _live_streams.append(_transcription_task)
             
         self.pending_transcription_task = []
@@ -93,12 +94,12 @@ class YouTubeVideoTranscription(FlowSpec, Mixin):
         
         self.next(self.transcribe, foreach='pending_transcription_task')
 
-    @batch(
-        cpu = 8, gpu = 1,
-        memory = int(os.getenv('MEMORY_REQUIRED', '12000')),
-        image = os.getenv('GPU_IMAGE', 'eddieob/whisper-gpu:latest'),
-        queue = os.getenv('BATCH_QUEUE_GPU')
-    )
+    # @batch(
+    #     cpu = 8, gpu = 1,
+    #     memory = int(os.getenv('MEMORY_REQUIRED', '12000')),
+    #     image = os.getenv('GPU_IMAGE', 'eddieob/whisper-gpu:latest'),
+    #     queue = os.getenv('BATCH_QUEUE_GPU')
+    # )
     @step
     def transcribe(self):
         self.transcription = self.input
@@ -133,6 +134,7 @@ class YouTubeVideoTranscription(FlowSpec, Mixin):
         for i, document in enumerate(self.documents):
             md.extend([
                 Markdown("## *Video Name:* {}".format(task_data[i]['title'])),
+                Markdown("![]({})".format(self.AUDIO_OUTPUT + task_data[i]['filename'])),
                 Markdown(document)
             ])
         current.card.extend(md)
