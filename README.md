@@ -24,21 +24,6 @@ conda activate youtube-transcription
 # Run the Code
 Before running the flow ensure you have the necessary AWS infrastructure setup for Metaflow. If you wany to run steps remotely you need to configure Metaflow storage in S3. 
 
-## Accessing Remote Compute
-
-To run this code remotetly you will need access to a [Metaflow deployment](#operate-metaflow-on-aws-infrastructure). Inside of a `.env` file you can configure the following items. 
-
-```.env
-DEFAULT_MODEL_TYPE="small"
-BATCH_QUEUE_CPU="<YOUR AWS BATCH QUEUE>"
-CPU_IMAGE="eddieob/whisper:latest"
-BATCH_QUEUE_GPU="<YOUR GPU-ENABLED AWS BATCH QUEUE>"
-GPU_IMAGE="eddieob/whisper-gpu:latest"
-```
-
-The images are available via Docker Hub, and the batch queue's will be unique to your cloud deployment.
-If you want to use a default queue, you can remove the `queue` argument from the `@batch()` decorator in `youtube_video_transcriber.py`. 
-
 ## Transcribe one Video
 
 To run the model locally with default parameters (such as using the `tiny` Whisper model), you can run the following:
@@ -65,6 +50,24 @@ python youtube_video_transcriber.py run --urls 'science_video_urls.txt'
 ```
 
 ## Cloud Compute and GPU Access
+
+### Accessing Remote Compute
+
+To run this code remotetly you will need access to a [Metaflow deployment](#operate-metaflow-on-aws-infrastructure). Inside of a `.env` file you can configure the following items. 
+
+```.env
+DEFAULT_MODEL_TYPE="small"
+BATCH_QUEUE_CPU="<YOUR AWS BATCH QUEUE>"
+CPU_IMAGE="eddieob/whisper:latest"
+BATCH_QUEUE_GPU="<YOUR GPU-ENABLED AWS BATCH QUEUE>"
+GPU_IMAGE="eddieob/whisper-gpu:latest"
+```
+
+The images are available via [Docker Hub](https://hub.docker.com/repository/docker/eddieob/whisper-gpu), and the batch queue's will be unique to your cloud deployment.
+If you want to use a default queue, you can remove the `queue` argument from the `@batch()` decorator in `youtube_video_transcriber.py`. 
+
+### Telling Metaflow to Run Steps Remotely
+
 If you look at the code you will see a `@batch` decorator commented out above the `transcribe` step. 
 Note that you will need to pick compute instances with enough memory to hold the version of Whisper you selected.
 We were able to run the large model with the following settings:
