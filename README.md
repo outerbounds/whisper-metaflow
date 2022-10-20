@@ -5,6 +5,16 @@
 This repository offers you a way to transcribe YouTube videos from only their URLs. 
 OpenAI's [Whisper model](https://github.com/openai/whisper) is used with Metaflow to transcribe the audio from many videos in parallel. To run the code in this repository in the cloud you will need access to a Metaflow deployment. You can also run locally if you prefer, but it may take a long time to use the larger versions of Whisper. If you want to learn more about Metaflow or need help getting set up, find us in the #ask-metaflow channel on [Slack](http://slack.outerbounds.co/)!
 
+# README.md Contents
+* (Cloud is optional) [Operate Metaflow in the Cloud](#operate-metaflow-in-the-cloud)
+* [Install Dependencies](#install-dependencies)
+* [Run the Code](#run-the-code)
+    * [Transcribe One Video](#transcribe-one-video)
+    * [Transcribe each Video in a Playlist](#transcribe-each-video-in-a-playlist)
+    * [Transcribe a List of Videos](#transcribe-a-list-of-videos)
+    * [Visualize Results in a Metaflow Card](#visualize-results-in-a-metaflow-card)
+    * (Cloud is optional) [Cloud Compute and GPU Access](#cloud-compute-and-gpu-access)
+
 # Operate Metaflow in the Cloud
 Note: You can skip this section if you are not interested in running on the cloud.
 
@@ -53,6 +63,12 @@ python youtube_video_transcriber.py run --url 'https://www.youtube.com/playlist?
 You can also pass a list of watch urls in a file. For example you can paste URLs in a `.txt.` file like `science_video_urls.txt` and then run the `transcribe` step in parallel for each video in the list.
 ```sh
 python youtube_video_transcriber.py run --urls 'science_video_urls.txt'
+```
+
+## Visualize Results in a Metaflow Card
+You can visualize the results of your flow by accessing the Metaflow card attached to the `postprocess` step:
+```
+python youtube_video_transcriber.py card view postprocess
 ```
 
 ## Cloud Compute and GPU Access
