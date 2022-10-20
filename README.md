@@ -1,5 +1,7 @@
 # Run Whisper With Metaflow 👋
 
+![](/fs-chat-cloud.png)
+
 This repository offers you a way to transcribe YouTube videos from only their URLs. 
 OpenAI's [Whisper model](https://github.com/openai/whisper) is used with Metaflow to transcribe the audio from many videos in parallel. To run the code in this repository in the cloud you will need access to a Metaflow deployment. You can also run locally if you prefer, but it may take a long time to use the larger versions of Whisper. If you want to learn more about Metaflow or need help getting set up, find us in the #ask-metaflow channel on [Slack](http://slack.outerbounds.co/)!
 
