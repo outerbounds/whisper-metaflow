@@ -27,6 +27,15 @@ If you don't have infrastructure setup, you can set up AWS infrastructure with t
 
 # Install Dependencies
 
+## Get the Code
+```
+git clone https://github.com/outerbounds/whisper-metaflow.git
+cd whisper-metaflow
+```
+
+## Install Whisper Dependencies
+If you do not already have it, you will need [ffmpeg](https://ffmpeg.org/) installed on your machine for Whisper to work. See these [instructions](https://github.com/openai/whisper#setup) to install on your machine.
+
 ## Use `env.yml` with `conda`
 
 The only hard dependency of this code is `conda`. If you do not already have the [Anaconda distribution](https://www.anaconda.com/download/) of Python 3, you will need to get it to install dependencies for this code.
