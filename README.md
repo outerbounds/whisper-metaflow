@@ -104,7 +104,7 @@ If you look at the [flow script](./youtube_video_transcriber.py) you will see a 
     gpu = 1,
     memory = 16000,
     image = 'eddieob/whisper-gpu:latest', # An image in Docker Hub to start the container that runs the step remotely.
-    queue = os.getenv('BATCH_QUEUE_GPU')  # An AWS Batch queue with access to compute environments running P3 instances.
+    queue = os.getenv('METAFLOW_BATCH_JOB_QUEUE') # An AWS Batch queue with access to compute environments running GPU instances.
 )
 
 ```
@@ -116,6 +116,6 @@ python youtube_video_transcriber.py run --model large
 
 The Docker image we leave as the default is available in [Docker Hub](https://hub.docker.com/repository/docker/eddieob/whisper-gpu).
 
-The batch queue will be unique based on how your Metaflow deployment is configured. If you intend to always use the same batch queue, you can set the `METAFLOW_BATCH_JOB_QUEUE` environment variable and remove the `queue` argument from the `@batch()` decorator in `youtube_video_transcriber.py`. You could also change the `@batch` decorator to [`@kubernetes`](https://docs.metaflow.org/api/step-decorators/kubernetes), if you opt to use [Metaflow with Kubernetes](https://github.com/valayDave/metaflow-on-kubernetes-docs).
+The batch queue will be unique based on how your Metaflow deployment is configured. You can set batch queue in your Metaflow config, the `METAFLOW_BATCH_JOB_QUEUE` environment variable, or the `queue` argument from the `@batch()` decorator in `youtube_video_transcriber.py`. You could also change the `@batch` decorator to [`@kubernetes`](https://docs.metaflow.org/api/step-decorators/kubernetes), if you opt to use [Metaflow with Kubernetes](https://github.com/valayDave/metaflow-on-kubernetes-docs).
 
 

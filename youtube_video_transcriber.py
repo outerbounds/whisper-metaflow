@@ -94,12 +94,11 @@ class YouTubeVideoTranscription(FlowSpec, Mixin):
         
         self.next(self.transcribe, foreach='pending_transcription_task')
 
-    # @batch(
-    #     cpu = 8, gpu = 1,
-    #     memory = int(os.getenv('MEMORY_REQUIRED', '12000')),
-    #     image = os.getenv('GPU_IMAGE', 'eddieob/whisper-gpu:latest'),
-    #     queue = os.getenv('BATCH_QUEUE_GPU')
-    # )
+    @batch(
+        cpu = 8, gpu = 1,
+        memory = int(os.getenv('MEMORY_REQUIRED', '16000')),
+        image = os.getenv('GPU_IMAGE', 'eddieob/whisper-gpu:latest') 
+    )
     @step
     def transcribe(self):
         self.transcription = self.input
