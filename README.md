@@ -87,18 +87,17 @@ python youtube_video_transcriber.py card view postprocess
 
 ### Accessing Remote Compute
 
-To run this code remotetly you will need access to a [Metaflow deployment](#operate-metaflow-on-aws-infrastructure). Inside of a `.env` file you can configure the following items. 
+To run this code remotetly you will need access to a [Metaflow deployment](#operate-metaflow-on-aws-infrastructure). Inside of a `.env` file you can optionally configure the following items (read more about using [.env files with Metaflow](https://outerbounds.com/docs/set-env-vars-with-file/)).
 
 ```.env
 DEFAULT_MODEL_TYPE="small"
-BATCH_QUEUE_CPU="<YOUR AWS BATCH QUEUE>"
-CPU_IMAGE="eddieob/whisper:latest"
 BATCH_QUEUE_GPU="<YOUR GPU-ENABLED AWS BATCH QUEUE>"
 GPU_IMAGE="eddieob/whisper-gpu:latest"
 ```
 
-The images are available via [Docker Hub](https://hub.docker.com/repository/docker/eddieob/whisper-gpu), and the batch queue's will be unique to your cloud deployment.
-If you want to use a default queue, you can remove the `queue` argument from the `@batch()` decorator in `youtube_video_transcriber.py`. 
+The image is available in [Docker Hub](https://hub.docker.com/repository/docker/eddieob/whisper-gpu).
+
+The images can be used to run the `transcribe` step in an AWS Batch Compute Environment or Kubernetes pod. If you look at the [flow script](./youtube_video_transcriber.py) it currently has the remote compute decorator commented out. If you uncomment the `@batch` [decorator](https://docs.metaflow.org/api/step-decorators/batch) it will run the code on AWS Batch. This is where the batch queue environment variables come in to play. The batch queue id will be unique to your Metaflow deployment. If you intend to always use the same batch queue, you can set the `METAFLOW_BATCH_JOB_QUEUE` environment variable remove the `queue` argument from the `@batch()` decorator in `youtube_video_transcriber.py`. If you plan to switch between running in different compute environments, say one with only CPU instances and one with GPU instances, then it is convenient to specify queue ids in a `.env` file like this.
 
 ### Telling Metaflow to Run Steps Remotely
 
@@ -120,6 +119,6 @@ You can uncomment this decorator in `youtube_video_transcriber.py` and then run:
 python youtube_video_transcriber.py run --model large
 ```
 
-You could also changed the `@batch` decorator to `@kubernetes`, if you opted for [Metaflow with Kubernetes](https://github.com/valayDave/metaflow-on-kubernetes-docs).
+You could also change the `@batch` decorator to `@kubernetes`, if you opted for [Metaflow with Kubernetes](https://github.com/valayDave/metaflow-on-kubernetes-docs).
 
 
