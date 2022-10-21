@@ -83,27 +83,21 @@ You can visualize the results of your flow by accessing the Metaflow card attach
 python youtube_video_transcriber.py card view postprocess
 ```
 
+## Access Results in a Notebook
+You can access results from a Jupyter notebook, the Python interpreter, or any script using the [Metaflow Client API])(https://docs.metaflow.org/api/client).
+```python
+from metaflow import Flow
+run = Flow('YouTubeVideoTranscription').latest_run
+# access results in run.data
+```
+
 ## Cloud Compute and GPU Access
 
 ### Accessing Remote Compute
 
-To run this code remotely you will need access to a [Metaflow deployment](#operate-metaflow-on-aws-infrastructure). Inside of a `.env` file you can optionally configure the following items (read more about using [.env files with Metaflow](https://outerbounds.com/docs/set-env-vars-with-file/)).
+To run this code remotely you will need access to a [Metaflow deployment](#operate-metaflow-on-aws-infrastructure). 
 
-```.env
-DEFAULT_MODEL_TYPE="small"
-BATCH_QUEUE_GPU="<YOUR GPU-ENABLED AWS BATCH QUEUE>"
-GPU_IMAGE="eddieob/whisper-gpu:latest"
-```
-
-The image is available in [Docker Hub](https://hub.docker.com/repository/docker/eddieob/whisper-gpu).
-
-The images can be used to run the `transcribe` step in an AWS Batch Compute Environment or Kubernetes pod. If you look at the [flow script](./youtube_video_transcriber.py) it currently has the remote compute decorator commented out. If you uncomment the `@batch` [decorator](https://docs.metaflow.org/api/step-decorators/batch) it will run the code on AWS Batch. This is where the batch queue environment variables come into play. The batch queue id will be unique to your Metaflow deployment. If you intend to always use the same batch queue, you can set the `METAFLOW_BATCH_JOB_QUEUE` environment variable and remove the `queue` argument from the `@batch()` decorator in `youtube_video_transcriber.py` - see the next section for details on the `@batch` decorator. If you plan to switch between running in different compute environments, say one with only CPU instances and one with GPU instances, then it is convenient to specify queue ids in a `.env` file like this.
-
-### Telling Metaflow to Run Steps Remotely
-
-If you look at the code you will see a `@batch` decorator commented out above the `transcribe` step. 
-Note that you will need to pick compute instances with enough memory to hold the version of Whisper you selected.
-We were able to run the large model with the following settings:
+If you look at the [flow script](./youtube_video_transcriber.py) you will see a `@batch` decorator commented out above the `transcribe` step. 
 ```
 @batch(
     cpu = 8, 
@@ -112,6 +106,7 @@ We were able to run the large model with the following settings:
     image = 'eddieob/whisper-gpu:latest', # An image in Docker Hub to start the container that runs the step remotely.
     queue = os.getenv('BATCH_QUEUE_GPU')  # An AWS Batch queue with access to compute environments running P3 instances.
 )
+
 ```
 You can uncomment this decorator in `youtube_video_transcriber.py` and then run:
 
@@ -119,6 +114,8 @@ You can uncomment this decorator in `youtube_video_transcriber.py` and then run:
 python youtube_video_transcriber.py run --model large
 ```
 
-You could also change the `@batch` decorator to [`@kubernetes`](https://docs.metaflow.org/api/step-decorators/kubernetes), if you opted for [Metaflow with Kubernetes](https://github.com/valayDave/metaflow-on-kubernetes-docs).
+The Docker image we leave as the default is available in [Docker Hub](https://hub.docker.com/repository/docker/eddieob/whisper-gpu).
+
+The batch queue will be unique based on how your Metaflow deployment is configured. If you intend to always use the same batch queue, you can set the `METAFLOW_BATCH_JOB_QUEUE` environment variable and remove the `queue` argument from the `@batch()` decorator in `youtube_video_transcriber.py`. You could also change the `@batch` decorator to [`@kubernetes`](https://docs.metaflow.org/api/step-decorators/kubernetes), if you opt to use [Metaflow with Kubernetes](https://github.com/valayDave/metaflow-on-kubernetes-docs).
 
 
