@@ -43,14 +43,14 @@ You can install dependencies of this code using `conda`. There are three options
 * [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
 * [Mamba](https://mamba.readthedocs.io/en/latest/)
 
-This repository includes a conda environment in `env.yml` file for you to use. You can install and activate the environemnent by running the following commands from this root of this repository in your terminal:
+This repository includes a conda environment in `env.yml` file for you to use. You can install and activate the environment by running the following commands from the root of this repository in your terminal:
 ```
 conda env create -f env.yml
 conda activate youtube-transcription
 ```
 
 # Run the Code
-Before running the flow ensure you have the necessary AWS infrastructure setup for Metaflow. If you wany to run steps remotely you need to configure Metaflow storage in S3. 
+Before running the flow ensure you have the necessary AWS infrastructure setup for Metaflow. If you want to run steps remotely you need to configure Metaflow storage in S3. 
 
 ## Transcribe one Video
 
@@ -59,7 +59,7 @@ To run the model locally with default parameters (such as using the `tiny` Whisp
 python youtube_video_transcriber.py run
 ```
 
-To specify a specific YouTube video, find the watch url starting with `https://www.youtube.com/watch` and pass it to the flow's `--url` parameter.
+To specify a specific YouTube video, find the watch URL starting with `https://www.youtube.com/watch` and pass it to the flow's `--url` parameter.
 ```sh
 python youtube_video_transcriber.py run --url 'https://www.youtube.com/watch?v=OH0Y_DUZu4Y'
 ```
@@ -72,7 +72,7 @@ python youtube_video_transcriber.py run --url 'https://www.youtube.com/playlist?
 ```
 
 ## Transcribe a List of Videos
-You can also pass a list of watch urls in a file. For example you can paste URLs in a `.txt.` file like `science_video_urls.txt` and then run the `transcribe` step in parallel for each video in the list.
+You can also pass a list of watch URLs in a file. For example you can paste URLs in a `.txt.` file like `science_video_urls.txt` and then run the `transcribe` step in parallel for each video in the list.
 ```sh
 python youtube_video_transcriber.py run --urls 'science_video_urls.txt'
 ```
