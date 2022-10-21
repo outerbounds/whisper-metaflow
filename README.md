@@ -38,7 +38,10 @@ If you do not already have it, you will need [ffmpeg](https://ffmpeg.org/) insta
 
 ## Use `env.yml` with `conda`
 
-The only hard dependency of this code is `conda`. If you do not already have the [Anaconda distribution](https://www.anaconda.com/download/) of Python 3, you will need to get it to install dependencies for this code.
+The only hard dependency of this code is `conda`. You have three options for using conda:
+* [Anaconda distribution](https://www.anaconda.com/download/) of Python 3
+* [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
+* [Mamba](https://mamba.readthedocs.io/en/latest/)
 
 We have included a conda environment in the form of a `env.yml` file for you to use. You can install and activate the environemnent by running the following commands from your terminal:
 ```
