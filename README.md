@@ -38,12 +38,12 @@ If you do not already have it, you will need [ffmpeg](https://ffmpeg.org/) insta
 
 ## Use `env.yml` with `conda`
 
-The only hard dependency of this code is `conda`. You have three options for using conda:
+You can install dependencies of this code using `conda`. There are three options for installing conda if you do not already have it:
 * [Anaconda distribution](https://www.anaconda.com/download/) of Python 3
 * [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
 * [Mamba](https://mamba.readthedocs.io/en/latest/)
 
-We have included a conda environment in the form of a `env.yml` file for you to use. You can install and activate the environemnent by running the following commands from your terminal:
+This repository includes a conda environment in `env.yml` file for you to use. You can install and activate the environemnent by running the following commands from this root of this repository in your terminal:
 ```
 conda env create -f env.yml
 conda activate youtube-transcription
