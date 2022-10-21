@@ -34,7 +34,7 @@ class YouTubeVideoTranscription(FlowSpec, Mixin):
     
     MIN_COUNT_W2V = Parameter(
         'min-ct', type = int, default = 5,
-        help = "The title to be displayed at the top the post processing step's card."
+        help = "The amount of occurences of a term to be included in word2vec embedding visualization."
     )
 
     @step
