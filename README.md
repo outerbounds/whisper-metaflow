@@ -84,7 +84,7 @@ python youtube_video_transcriber.py card view postprocess
 ```
 
 ## Access Results in a Notebook
-You can access results from a Jupyter notebook, the Python interpreter, or any script using the [Metaflow Client API])(https://docs.metaflow.org/api/client).
+You can access results from a Jupyter notebook, the Python interpreter, or any script using the [Metaflow Client API](https://docs.metaflow.org/api/client)).
 ```python
 from metaflow import Flow
 run = Flow('YouTubeVideoTranscription').latest_run
