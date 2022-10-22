@@ -37,10 +37,7 @@ class Mixin:
             from nltk.corpus import stopwords
             words += list(stopwords.words('english'))
         except LookupError:
-            import nltk
-            from nltk.corpus import stopwords
-            nltk.download('stopwords')
-            words += list(words.words('english'))
+            pass
         try:
             from gensim.parsing.preprocessing import remove_stopwords, STOPWORDS
             words += list(STOPWORDS)
